@@ -1,0 +1,11 @@
+<resources>
+    <!-- BEGIN: Standard string values-->
+    <string name="app_name">Metronome: Light/Vibration/Sound</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <!-- END: Standard string values-->
+    <!-- BEGIN: My string values-->
+    <string name="general_title">Metronome</string>
+    <!-- END: My string values-->
+</resources>
