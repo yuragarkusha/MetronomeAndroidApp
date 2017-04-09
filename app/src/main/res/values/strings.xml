@@ -7,5 +7,10 @@
     <!-- END: Standard string values-->
     <!-- BEGIN: My string values-->
     <string name="general_title">Metronome</string>
+    <string name="light_title">Light</string>
+    <string name="vibro_title">Vibro</string>
+    <string name="sound_title">Sound</string>
+    <string name="switch_button_on">Switch ON</string>
+    <string name="switch_button_off">Switch OFF</string>
     <!-- END: My string values-->
 </resources>
