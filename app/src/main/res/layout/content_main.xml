@@ -111,7 +111,8 @@
                 android:layout_weight="2"
                 android:gravity="center"
                 style="@style/title2_text"
-                android:text="@string/switch_button_on" />
+                android:text="@string/switch_button_on"
+                android:onClick="switchButtonOnClick" />
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
