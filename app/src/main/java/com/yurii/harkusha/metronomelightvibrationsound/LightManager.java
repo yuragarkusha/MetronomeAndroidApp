@@ -13,15 +13,16 @@ import android.os.Build;
  */
 
 class LightManager {
-    private boolean isFlashOn;
+    private boolean isLightTurnOn;
     private Context context;
-    private final boolean deviceHasFlash;
-    private CameraManager mCameraManager;
-    private String mCameraId;
     private PackageManager packageManager;
-
-    private Camera camera;
-    private Parameters parameters;
+    private final boolean deviceHasFlash;
+    //New camera variables
+    private CameraManager cameraManager;
+    private String cameraId;
+    //Old camera variables
+    private Camera oldCamera;
+    private Parameters parametersForOldCamera;
 
 
     LightManager(Context _context) throws CameraAccessException {
@@ -30,51 +31,52 @@ class LightManager {
         deviceHasFlash = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
-            mCameraId = mCameraManager.getCameraIdList()[0];
+            cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+            cameraId = cameraManager.getCameraIdList()[0];
         } else {
-            camera = null;
+            oldCamera = null;
         }
     }
 
 
     public void turnOnFlash() throws Exception {
-        if (!isFlashOn && isDeviceHasFlash()) {
+        if (!isLightTurnOn && isDeviceHasFlash()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mCameraManager.setTorchMode(mCameraId, true);
+                cameraManager.setTorchMode(cameraId, true);
+                isLightTurnOn = true;
             } else {
-                if (camera == null) {
-                    camera = Camera.open();
-                    parameters = camera.getParameters();
-                    parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-                    camera.setParameters(parameters);
-                    camera.startPreview();
-                    isFlashOn = true;
+                if (oldCamera == null) {
+                    oldCamera = Camera.open();
+                    parametersForOldCamera = oldCamera.getParameters();
+                    parametersForOldCamera.setFlashMode(Parameters.FLASH_MODE_TORCH);
+                    oldCamera.setParameters(parametersForOldCamera);
+                    oldCamera.startPreview();
+                    isLightTurnOn = true;
                 }
             }
         }
     }
 
     public void turnOffFlash() throws Exception {
-        if (isFlashOn && isDeviceHasFlash()) {
+        if (isLightTurnOn && isDeviceHasFlash()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mCameraManager.setTorchMode(mCameraId, false);
-                isFlashOn = false;
+                cameraManager.setTorchMode(cameraId, false);
+                isLightTurnOn = false;
             } else {
-                if (camera != null) {
-                    parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
-                    camera.setParameters(parameters);
-                    camera.stopPreview();
-                    camera.release();
-                    camera = null;
-                    isFlashOn = false;
+                if (oldCamera != null) {
+                    parametersForOldCamera.setFlashMode(Parameters.FLASH_MODE_OFF);
+                    oldCamera.setParameters(parametersForOldCamera);
+                    oldCamera.stopPreview();
+                    oldCamera.release();
+                    oldCamera = null;
+                    isLightTurnOn = false;
                 }
             }
         }
     }
 
-    public boolean isFlashOn() {
-        return isFlashOn;
+    public boolean isLightTurnOn() {
+        return isLightTurnOn;
     }
 
     public boolean isDeviceHasFlash() {

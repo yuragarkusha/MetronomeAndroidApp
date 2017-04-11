@@ -108,7 +108,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void switchButtonOnClick(View view) throws Exception {
-        sensorManager.turnOnLight();
+        sensorManager.turnOnOffLight();
+        sensorManager.turnOnVibrate();
     }
 
     public void initSensorManager() throws Exception {

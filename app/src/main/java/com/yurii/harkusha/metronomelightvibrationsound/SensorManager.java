@@ -9,46 +9,61 @@ import android.hardware.camera2.CameraAccessException;
 
 class SensorManager {
     private LightManager lightManager;
-    private boolean lightStatus;
-    private boolean vibroStatus;
-    private boolean soundStatus;
+    private VibrationManager vibrationManager;
+    private boolean isLightTurnOn;
+    private boolean isSoundTurnOn;
     private Context context;
     private int frequency;
+    private int durationOfVibration;
 
     SensorManager(Context _context) throws CameraAccessException {
         context = _context;
         lightManager = new LightManager(context);
+        durationOfVibration = 100;
+        vibrationManager = new VibrationManager(context, durationOfVibration);
     }
 
 
     public void turnOnLight() throws Exception {
         lightManager.turnOnFlash();
-        this.setLightStatus(lightManager.isFlashOn());
+        this.setLightTurnOn(lightManager.isLightTurnOn());
     }
 
-
-    public boolean isLightStatus() {
-        return lightStatus;
+    public void turnOffLight() throws Exception {
+        lightManager.turnOffFlash();
+        this.setLightTurnOn(lightManager.isLightTurnOn());
     }
 
-    public void setLightStatus(boolean lightStatus) {
-        this.lightStatus = lightStatus;
+    public void turnOnOffLight() throws Exception {
+        if (!isLightTurnOn()) {
+            turnOnLight();
+        } else {
+            turnOffLight();
+        }
     }
 
-    public boolean isVibroStatus() {
-        return vibroStatus;
+    public void turnOnVibrate() throws CameraAccessException {
+        vibrationManager.startVibrate();
     }
 
-    public void setVibroStatus(boolean vibroStatus) {
-        this.vibroStatus = vibroStatus;
+    public void changeDurationOfVibration(int newDuration) {
+        vibrationManager.setDurationOfVibration(newDuration);
     }
 
-    public boolean isSoundStatus() {
-        return soundStatus;
+    public boolean isLightTurnOn() {
+        return isLightTurnOn;
     }
 
-    public void setSoundStatus(boolean soundStatus) {
-        this.soundStatus = soundStatus;
+    public void setLightTurnOn(boolean lightTurnOn) {
+        this.isLightTurnOn = lightTurnOn;
+    }
+
+    public boolean isSoundTurnOn() {
+        return isSoundTurnOn;
+    }
+
+    public void setSoundTurnOn(boolean soundTurnOn) {
+        this.isSoundTurnOn = soundTurnOn;
     }
 
     public int getFrequency() {
